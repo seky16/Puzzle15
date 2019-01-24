@@ -3,17 +3,7 @@
 #include "Game.h"
 #include <iostream>
 #include <ctime>
-#include <vector>
-#include <cmath>
 #include <conio.h>
-
-using namespace std;
-
-void clear();
-
-int getKeyPress();
-
-int main();
 
 enum AllowedKeys
 {
@@ -26,3 +16,9 @@ enum AllowedKeys
     I_KEY = 'i',
     ESC = 27
 };
+
+void clear();
+
+int getKeyPress();
+
+int main();

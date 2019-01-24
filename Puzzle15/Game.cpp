@@ -4,122 +4,42 @@
 Game::Game(int n = 4)
 {
     // initialize board
-    N = n;
-    MovesCount = 0;
-    int size = n * n;
-    Board = vector<int>(size);
-    for (int i = 0; i < size; i++)
-    {
-        Board[i] = i;
-    }
-    /*/
-    Board.erase(Board.begin());
-    Board.push_back(0);
-    switchPlaces(Board.size() - 2, Board.size() - 1); // solvable
-    switchPlaces(Board.size() - 2, Board.size() - 3); // unsolvable
-    bool test = checkBoardSolveable();//*/
+    Game::n = n;
+    movesCount = 0;
+    board = Board(n);
 
-    //
     do
-    {
-        // shuffle the board (Knuth-fisher-Yates shuffle)
-        for (int i = size - 1; i > 0; i--)
-        {
-            int r = floor(rand() % i);
+        board.shuffle();
+    while (!board.isSolvable() || board.isFinished()); // shuffle until it is solvable or not finished
 
-            switchPlaces(i, r);
-        }
-        // until it is solvable
-    } while (!checkBoardSolvable());//*/
-
-    StartingBoard = Board;
+    startingBoard = board;
 }
 
 Game::~Game()
 {
 }
 
-bool Game::checkBoardSolvable()
-{
-    // https://www.cs.bham.ac.uk/~mdr/teaching/modules04/java2/TilesSolvability.html
-
-    // get number of inversions
-    int invCount = 0;
-    for (int i = 0; i < Board.size(); i++)
-    {
-        for (int j = i + 1; j < Board.size(); j++)
-        {
-            if (Board[j] != 0 && Board[i] > Board[j])
-                invCount++;
-        }
-
-        if (Board[i] == 0)
-            GapIndex = i;
-    }
-
-    // even grid
-    if (N % 2 == 0)
-    {
-        int fromBottom = N - (GapIndex / N);
-        // blank on odd row from bottom
-        if (fromBottom % 2 != 0)
-        {
-            return invCount % 2 == 0;
-        }
-        else // blank on even row; counting from bottom
-        {
-            return invCount % 2 != 0;
-        }
-    }
-    else // odd grid
-    {
-        return invCount % 2 == 0;
-    }
-}
-
-void Game::switchPlaces(int firstIndex, int secondIndex)
-{
-    int temp = Board[firstIndex];
-    Board[firstIndex] = Board[secondIndex];
-    Board[secondIndex] = temp;
-
-
-    if (Board[firstIndex] == 0)
-        GapIndex = firstIndex;
-    else if (Board[secondIndex] == 0)
-        GapIndex = secondIndex;
-}
-
-bool Game::checkBoardFinished()
-{
-    if (Board.back() != 0)
-        return false;
-
-    for (int i = 0; i < Board.size() - 1; i++)
-    {
-        if (Board[i] != i + 1)
-            return false;
-    }
-
-    return true;
-}
-
 string Game::displayBoard()
 {
     stringstream output;
     output << endl << endl;
-    for (int i = 0; i < Board.size(); i++)
+    for (int i = 0; i < board.size; i++)
     {
-        string val = Board[i] == 0 ? " " : to_string(Board[i]);
+        string val = board.valueAt(i) == 0 ? " " : to_string(board.valueAt(i));
         output << "\t" << val;
-        if ((i + 1) % N == 0)
+        if ((i + 1) % n == 0)
         {
             output << endl << endl;
         }
     }
     output << endl;
-    output << "Moves: " << MovesCount << endl << endl;
+    output << "Moves: " << movesCount << endl << endl;
     return output.str();
+}
+
+bool Game::isFinished()
+{
+    return board.isFinished();
 }
 
 void Game::makeMove(int move, bool invert)
@@ -148,42 +68,36 @@ void Game::makeMove(int move, bool invert)
     switch (move)
     {
     case MOVE_UP:
-        if (GapIndex >= (N * (N - 1)))
+        if (board.gapIndex >= (n * (n - 1)))
             return; // illegal move
-        switchPlaces(GapIndex, GapIndex + N);
+        board.swap(board.gapIndex, board.gapIndex + n);
         break;
     case MOVE_DOWN:
-        if (GapIndex < N)
+        if (board.gapIndex < n)
             return; // illegal move
-        switchPlaces(GapIndex, GapIndex - N);
+        board.swap(board.gapIndex, board.gapIndex - n);
         break;
     case MOVE_LEFT:
-        if (GapIndex % N == (N - 1))
+        if (board.gapIndex % n == (n - 1))
             return; // illegal move
-        switchPlaces(GapIndex, GapIndex + 1);
+        board.swap(board.gapIndex, board.gapIndex + 1);
         break;
     case MOVE_RIGHT:
-        if (GapIndex % N == 0)
+        if (board.gapIndex % n == 0)
             return; // illegal move
-        switchPlaces(GapIndex, GapIndex - 1);
+        board.swap(board.gapIndex, board.gapIndex - 1);
         break;
     default:
         return;
     }
-    MovesCount++;
+    movesCount++;
 }
 
 void Game::restart()
 {
-    Board = StartingBoard;
-    MovesCount = 0;
-
-    for (int i = 0; i < Board.size(); i++)
-    {
-        if (Board[i] == 0)
-        {
-            GapIndex = i;
-            break;
-        }
-    }
+    // TODO fix startingBoard
+    throw;
+    board = startingBoard;
+    movesCount = 0;
+    board.gapIndex = board.indexOf(0);
 }

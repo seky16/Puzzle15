@@ -1,9 +1,7 @@
 #pragma once
 
-#include <ctime>
-#include <vector>
-#include <cmath>
 #include <sstream>
+#include "Board.h"
 
 using namespace std;
 
@@ -20,16 +18,14 @@ class Game
 public:
     Game(int n);
     ~Game();
-    bool checkBoardFinished();
+private:
+    int n;
+    int movesCount;
+    Board startingBoard;
+public:
+    Board board;
     string displayBoard();
-    vector<int> Board;
+    bool isFinished();
     void makeMove(int move, bool invert);
     void restart();
-private:
-    int N;
-    bool checkBoardSolvable();
-    void switchPlaces(int firstIndex, int secondIndex);
-    int MovesCount;
-    vector<int> StartingBoard;
-    int GapIndex;
 };

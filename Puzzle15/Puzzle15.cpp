@@ -60,7 +60,7 @@ int main()
         string invertString = "(OFF)";
 
         // game loop
-        while (!game.checkBoardFinished() && !newGame)
+        while (!game.isFinished() && !newGame)
         {
             clear();
             cout << game.displayBoard();
