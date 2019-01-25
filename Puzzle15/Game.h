@@ -21,11 +21,9 @@ public:
 private:
     int n;
     int movesCount;
-    Board startingBoard;
 public:
     Board board;
     string displayBoard();
     bool isFinished();
     void makeMove(int move, bool invert);
-    void restart();
 };

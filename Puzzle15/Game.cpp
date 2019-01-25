@@ -11,8 +11,6 @@ Game::Game(int n = 4)
     do
         board.shuffle();
     while (!board.isSolvable() || board.isFinished()); // shuffle until it is solvable or not finished
-
-    startingBoard = board;
 }
 
 Game::~Game()
@@ -91,13 +89,4 @@ void Game::makeMove(int move, bool invert)
         return;
     }
     movesCount++;
-}
-
-void Game::restart()
-{
-    // TODO fix startingBoard
-    throw;
-    board = startingBoard;
-    movesCount = 0;
-    board.gapIndex = board.indexOf(0);
 }

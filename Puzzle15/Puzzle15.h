@@ -11,7 +11,6 @@ enum AllowedKeys
     DOWN_ARROW = 80,
     LEFT_ARROW = 75,
     RIGHT_ARROW = 77,
-    R_KEY = 'r',
     N_KEY = 'n',
     I_KEY = 'i',
     ESC = 27

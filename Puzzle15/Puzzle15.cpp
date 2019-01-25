@@ -23,7 +23,6 @@ int getKeyPress()
     case DOWN_ARROW:
     case LEFT_ARROW:
     case RIGHT_ARROW:
-    case R_KEY:
     case N_KEY:
     case I_KEY:
     case ESC:
@@ -66,16 +65,12 @@ int main()
             cout << game.displayBoard();
             cout << "Use arrow keys to move." << endl;
             cout << "Press I to invert controls. " << invertString << endl;
-            cout << "Press R to restart (with same board)." << endl;
             cout << "Press N for a new Game." << endl;
             cout << "Press ESC to exit." << endl;
 
             int key = getKeyPress();
             switch (key)
             {
-            case R_KEY:
-                game.restart();
-                break;
             case N_KEY:
                 clear();
                 newGame = true;
